@@ -8,7 +8,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 export const config = getDefaultConfig({
     appName: 'Radish',
-    projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '', // Get one at https://cloud.walletconnect.com
+    projectId: '066465a4f5d400c9eccad76612f98c5a', // Get one at https://cloud.walletconnect.com
     chains: [optimismSepolia, neoxT4, neoxMainnet],
     transports: {
         [optimismSepolia.id]: http(),
