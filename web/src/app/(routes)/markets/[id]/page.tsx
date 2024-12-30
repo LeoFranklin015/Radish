@@ -8,11 +8,16 @@ import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
 import Layout from "@/components/layouts/MainLayout";
 import { useMarket, useMarketActions } from "@/hooks/useMarkets";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { CustomConnectButton } from "@/components/ui/CustomConnectButton";
 import { request, gql } from "graphql-request";
-import { SUBGRAPH_URL } from "@/config/contracts";
+import {
+  CONTRACT_ADDRESSES,
+  ERC20_ABI,
+  SUBGRAPH_URL,
+} from "@/config/contracts";
 import { useChainId } from "wagmi";
+import { parseEther } from "viem";
 
 // Dynamically import TradingView chart to avoid SSR issues
 const TradingViewWidget = dynamic(
@@ -174,6 +179,22 @@ export default function MarketPage() {
       console.error("Resolution failed:", err);
     }
   };
+  const {
+    writeContractAsync: mint,
+    isPending: mintIsPending,
+    error: mintError,
+  } = useWriteContract();
+  const handleMint = async () => {
+    try {
+      await mint({
+        address: CONTRACT_ADDRESSES[chainId].mockERC20,
+        abi: ERC20_ABI,
+        functionName: "mint",
+        chainId: chainId as any,
+        args: [address as `0x${string}`, parseEther("1000")],
+      });
+    } catch (error) {}
+  };
 
   if (marketLoading) {
     return (
@@ -210,6 +231,7 @@ export default function MarketPage() {
         <div className="text-right space-y-4">
           {market.creatorHandle && (
             <div className="text-3xl font-semibold text-black">
+              Created by:{" "}
               {market.creatorHandle.slice(0, 4) +
                 "..." +
                 market.creatorHandle.slice(-4)}
@@ -220,8 +242,17 @@ export default function MarketPage() {
               Target: {(market.target / 1000000).toFixed(1)}M
             </div>
           )}
-          <div className="justify-end">
-            <CustomConnectButton dark />
+          <div className="flex justify-end gap-2 items-center">
+            <Button
+              variant={"outline"}
+              disabled={!address || mintIsPending}
+              onClick={handleMint}
+            >
+              Mint USDC
+            </Button>
+            <div className="justify-end">
+              <CustomConnectButton dark />
+            </div>
           </div>
         </div>
       </div>
