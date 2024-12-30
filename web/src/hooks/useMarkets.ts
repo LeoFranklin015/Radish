@@ -346,6 +346,14 @@ export function useMarketActions(marketId: string) {
     error: resolveError,
   } = useWriteContract();
   // For mock markets, return mock actions
+
+  const {
+    writeContractAsync: claim,
+    isPending: claimIsPending,
+    error: claimError,
+  } = useWriteContract();
+
+  // For mock markets, return mock actions
   if (marketId.startsWith("mock-")) {
     return {
       buy: async (isYes: boolean, amount: number) => {
@@ -359,6 +367,9 @@ export function useMarketActions(marketId: string) {
       },
       resolve: async (address: `0x${string}`) => {
         console.log("Mock resolve");
+      },
+      claim: async (address: `0x${string}`) => {
+        console.log("Mock claim");
       },
       isLoading: false,
       error: null,
@@ -404,8 +415,21 @@ export function useMarketActions(marketId: string) {
         chainId: chainId as any,
       });
     },
+
+    claim: async (address: `0x${string}`) => {
+      await claim({
+        address: address,
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "claimReward",
+        chainId: chainId as any,
+      });
+    },
     isLoading:
-      buyIsPending || sellIsPending || approveIsPending || resolveIsPending,
-    error: buyError || sellError || approveError || resolveError,
+      buyIsPending ||
+      sellIsPending ||
+      approveIsPending ||
+      resolveIsPending ||
+      claimIsPending,
+    error: buyError || sellError || approveError || resolveError || claimError,
   };
 }
