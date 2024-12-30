@@ -289,10 +289,8 @@ export default function MyPredictionsPage() {
         columnClassName="my-masonry-grid_column p-wall-tilt"
       >
         {combinedPredictions.map((pred) => (
-          <Link
+          <div
             key={pred.marketId}
-            href={`/markets/${pred.marketId}`}
-            className="h-full"
           >
             <motion.div
               whileHover={{
@@ -340,13 +338,16 @@ export default function MyPredictionsPage() {
               </div>
               <div className="flex w-full justify-between text-sm border-t pt-4 border-zinc-700">
                 {!pred.resolved && (
-                  <Button onClick={() => handleClaim(pred)}>
+                  <Button className="text-black" onClick={() => handleClaim(pred)}>
                     Claim Winnings
                   </Button>
                 )}
+                <Link href={`/markets/${pred.marketId}`}>
+                  <Button className="text-black">View Market</Button>
+                </Link>
               </div>
             </motion.div>
-          </Link>
+          </div>
         ))}
       </Masonry>
 
