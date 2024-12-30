@@ -142,6 +142,9 @@ export function useMarkets() {
                 args: [false],
               });
 
+              console.log("yesPrice", yesPrice);
+              console.log("noPrice", noPrice);
+
               return {
                 id: m.id,
                 title: m.question,
@@ -166,6 +169,7 @@ export function useMarkets() {
         // Filter out null results and merge with mock markets
         const validMarkets = marketsFromGraph.filter((m) => m !== null);
         setMarkets([...mockMarkets, ...validMarkets]);
+        console.log("markets", data.markets);
       } catch (err) {
         console.error("Error fetching markets:", err);
         setError(err as Error);

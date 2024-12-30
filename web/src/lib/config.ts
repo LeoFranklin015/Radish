@@ -1,17 +1,11 @@
 import { http, createConfig } from "@wagmi/core";
-import {
-  mainnet,
-  optimismSepolia,
-  neoxMainnet,
-  neoxT4,
-} from "@wagmi/core/chains";
+import { optimismSepolia, neoxMainnet, neoxT4 } from "@wagmi/core/chains";
 
 export const config = createConfig({
-  chains: [mainnet, optimismSepolia, neoxMainnet],
+  chains: [neoxT4, optimismSepolia, neoxMainnet],
   transports: {
-    [mainnet.id]: http(),
+    [neoxT4.id]: http(),
     [optimismSepolia.id]: http(),
     [neoxMainnet.id]: http(),
-    [neoxT4.id]: http(),
   },
 });

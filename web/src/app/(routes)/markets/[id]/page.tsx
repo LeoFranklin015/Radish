@@ -192,7 +192,7 @@ export default function MarketPage() {
 
   return (
     <Layout>
-      <div className="flex justify-between items-center border-b border-zinc-700 pb-5 mb-[60px]">
+      <div className="flex justify-between items-center border-b border-zinc-700 pb-5">
         <h1 className="text-5xl font-semibold text-black w-2/3">
           {market.title}
         </h1>
@@ -212,7 +212,7 @@ export default function MarketPage() {
           </div>
         </div>
       </div>
-      <section className="p-wall-tilt mt-10">
+      <section className="mt-5">
         <div className="grid grid-cols-3 gap-8">
           {/* Left Column: Chart */}
           <div className="col-span-2 p-shadow p-6 rounded bg-black text-white">
