@@ -252,7 +252,6 @@ export default function MarketPage() {
           )}
           <div className="flex justify-end gap-2 items-center">
             <Button
-
               variant={"outline"}
               disabled={!address || mintIsPending}
               onClick={handleMint}
