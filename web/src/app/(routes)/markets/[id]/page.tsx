@@ -149,13 +149,21 @@ export default function MarketPage() {
     setEstimatedCost(numericAmount * price);
   };
 
-  const handleTrade = async () => {
+  const handleTrade = async (tradeType: 'buy' | 'sell') => {
     if (!market || !amount) return;
     try {
-      if (activeTab === "yes") {
-        await buy(true, parseFloat(amount), market.contractAddress);
+      if (tradeType === 'buy') {
+        if (activeTab === "yes") {
+          await buy(true, parseFloat(amount), market.contractAddress);
+        } else {
+          await buy(false, parseFloat(amount), market.contractAddress);
+        }
       } else {
-        await buy(false, parseFloat(amount), market.contractAddress);
+        if (activeTab === "yes") {
+          await sell(true, parseFloat(amount), market.contractAddress);
+        } else {
+          await sell(false, parseFloat(amount), market.contractAddress);
+        }
       }
     } catch (err) {
       console.error("Trade failed:", err);
@@ -193,7 +201,7 @@ export default function MarketPage() {
         chainId: chainId as any,
         args: [address as `0x${string}`, parseEther("1000")],
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   if (marketLoading) {
@@ -332,18 +340,30 @@ export default function MarketPage() {
                     >
                       {actionLoading
                         ? "Processing..."
-                        : `Approve Contract to Buy ${activeTab.toUpperCase()} Shares`}
+                        : `Approve Contract to Trade ${activeTab.toUpperCase()} Shares`}
                     </Button>
-                    <Button
-                      onClick={handleTrade}
-                      className="w-full text-white"
-                      variant={activeTab === "yes" ? "success" : "destructive"}
-                      disabled={actionLoading || !amount}
-                    >
-                      {actionLoading
-                        ? "Processing..."
-                        : `Buy ${activeTab.toUpperCase()} Shares`}
-                    </Button>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button
+                        onClick={(e) => handleTrade('buy')}
+                        className="w-full text-white"
+                        variant={activeTab === "yes" ? "success" : "destructive"}
+                        disabled={actionLoading || !amount}
+                      >
+                        {actionLoading
+                          ? "Processing..."
+                          : `Buy ${activeTab.toUpperCase()}`}
+                      </Button>
+                      <Button
+                        onClick={(e) => handleTrade('sell')}
+                        className="w-full text-white"
+                        variant={activeTab === "yes" ? "success" : "destructive"}
+                        disabled={actionLoading || !amount}
+                      >
+                        {actionLoading
+                          ? "Processing..."
+                          : `Sell ${activeTab.toUpperCase()}`}
+                      </Button>
+                    </div>
 
                     {actionError && (
                       <p className="text-red-500 text-sm">
@@ -373,15 +393,15 @@ export default function MarketPage() {
                   </div>
                   {address.toLowerCase() ==
                     market.creatorHandle.toLowerCase() && (
-                    <Button
-                      onClick={handleResolution}
-                      className="w-full text-white"
-                      variant="destructive"
-                      disabled={actionLoading}
-                    >
-                      {actionLoading ? "Resolving..." : `Resolve Market`}
-                    </Button>
-                  )}
+                      <Button
+                        onClick={handleResolution}
+                        className="w-full text-white"
+                        variant="destructive"
+                        disabled={actionLoading}
+                      >
+                        {actionLoading ? "Resolving..." : `Resolve Market`}
+                      </Button>
+                    )}
                 </div>
               </div>
             )}
