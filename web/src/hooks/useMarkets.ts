@@ -339,6 +339,12 @@ export function useMarketActions(marketId: string) {
     isPending: approveIsPending,
     error: approveError,
   } = useWriteContract();
+
+  const {
+    writeContractAsync: resolve,
+    isPending: resolveIsPending,
+    error: resolveError,
+  } = useWriteContract();
   // For mock markets, return mock actions
   if (marketId.startsWith("mock-")) {
     return {
@@ -350,6 +356,9 @@ export function useMarketActions(marketId: string) {
       },
       approve: async (address: `0x${string}`) => {
         console.log("Mock approve:", { address });
+      },
+      resolve: async (address: `0x${string}`) => {
+        console.log("Mock resolve");
       },
       isLoading: false,
       error: null,
@@ -386,7 +395,17 @@ export function useMarketActions(marketId: string) {
         args: [address, parseEther("1000")],
       });
     },
-    isLoading: buyIsPending || sellIsPending || approveIsPending,
-    error: buyError || sellError || approveError,
+
+    resolve: async (address: `0x${string}`) => {
+      await resolve({
+        address: address,
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "resolve",
+        chainId: chainId as any,
+      });
+    },
+    isLoading:
+      buyIsPending || sellIsPending || approveIsPending || resolveIsPending,
+    error: buyError || sellError || approveError || resolveError,
   };
 }
