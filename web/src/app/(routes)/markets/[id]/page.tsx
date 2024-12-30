@@ -252,15 +252,16 @@ export default function MarketPage() {
           )}
           <div className="flex justify-end gap-2 items-center">
             <Button
+
               variant={"outline"}
               disabled={!address || mintIsPending}
               onClick={handleMint}
             >
-              Mint USDC
+              Faucet xUSDC
             </Button>
-            <div className="justify-end">
+            {!address && <div className="justify-end">
               <CustomConnectButton dark />
-            </div>
+            </div>}
           </div>
         </div>
       </div>
