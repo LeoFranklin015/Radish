@@ -70,12 +70,14 @@ export default function MarketPage() {
     buy,
     sell,
     approve,
+    resolve,
     isLoading: actionLoading,
     error: actionError,
   }: {
     buy: any;
     sell: any;
     approve: any;
+    resolve: any;
     isLoading: boolean;
     error: any;
   } = useMarketActions(id as string);
@@ -164,6 +166,15 @@ export default function MarketPage() {
     }
   };
 
+  const handleResolution = async () => {
+    if (!market) return;
+    try {
+      await resolve(market.contractAddress);
+    } catch (err) {
+      console.error("Resolution failed:", err);
+    }
+  };
+
   if (marketLoading) {
     return (
       <Layout>
@@ -199,7 +210,9 @@ export default function MarketPage() {
         <div className="text-right space-y-4">
           {market.creatorHandle && (
             <div className="text-3xl font-semibold text-black">
-              {market.creatorHandle}
+              {market.creatorHandle.slice(0, 4) +
+                "..." +
+                market.creatorHandle.slice(-4)}
             </div>
           )}
           {market.target && (
@@ -327,6 +340,17 @@ export default function MarketPage() {
                       {market.endDate}
                     </div>
                   </div>
+                  {address.toLowerCase() ==
+                    market.creatorHandle.toLowerCase() && (
+                    <Button
+                      onClick={handleResolution}
+                      className="w-full text-white"
+                      variant="destructive"
+                      disabled={actionLoading}
+                    >
+                      {actionLoading ? "Resolving..." : `Resolve Market`}
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
