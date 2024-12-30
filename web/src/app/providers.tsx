@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultConfig, darkTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 
-const config = getDefaultConfig({
+export const config = getDefaultConfig({
     appName: 'Radish',
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '', // Get one at https://cloud.walletconnect.com
     chains: [optimismSepolia, neoxT4, neoxMainnet],

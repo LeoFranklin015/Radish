@@ -9,7 +9,7 @@ import {
 import { readContract } from "@wagmi/core";
 import { request } from "graphql-request";
 import { useEffect, useState } from "react";
-import { config } from "@/lib/config";
+import { config } from "@/app/providers";
 import { parseEther } from "viem";
 import { useChainId } from "wagmi";
 
