@@ -248,7 +248,7 @@ export default function MyPredictionsPage() {
 
   const handleClaim = async (pred: Prediction) => {
     console.log("Claiming winnings...", pred);
-    const { claim } = useMarketActions(pred.marketId);
+    const { claim } = useMarketActions(pred.marketId); // eslint-disable-line
     await claim(pred.contractAddress as `0x${string}`);
   };
 
