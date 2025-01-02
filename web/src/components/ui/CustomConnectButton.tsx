@@ -1,4 +1,4 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectKitButton } from "connectkit";
 import { Button } from "@/components/ui/button";
 import Image from 'next/image';
 
@@ -8,23 +8,16 @@ export const CustomConnectButton = ({
     dark?: boolean
 }) => {
     return (
-        <ConnectButton.Custom>
+        <ConnectKitButton.Custom>
             {({
-                account,
-                chain,
-                openAccountModal,
-                openChainModal,
-                openConnectModal,
-                authenticationStatus,
-                mounted,
+                isConnected, isConnecting, show, hide, address, ensName, chain, truncatedAddress
             }) => {
-                const ready = mounted && authenticationStatus !== 'loading';
+                const ready = !isConnecting;
                 const connected =
                     ready &&
-                    account &&
+                    address &&
                     chain &&
-                    (!authenticationStatus ||
-                        authenticationStatus === 'authenticated');
+                    isConnected;
 
                 return (
                     <div
@@ -41,7 +34,7 @@ export const CustomConnectButton = ({
                             if (!connected) {
                                 return (
                                     <Button
-                                        onClick={openConnectModal}
+                                        onClick={show}
                                         variant="outline"
                                         className={!dark ?
                                             `font-medium border-neo-green text-neo-green hover:bg-neo-green hover:text-black` :
@@ -56,7 +49,7 @@ export const CustomConnectButton = ({
                             if (chain.unsupported) {
                                 return (
                                     <Button
-                                        onClick={openChainModal}
+                                        onClick={show}
                                         variant="destructive"
                                         className="font-medium"
                                     >
@@ -68,7 +61,7 @@ export const CustomConnectButton = ({
                             return (
                                 <div className="flex items-center gap-2">
                                     <Button
-                                        onClick={openChainModal}
+                                        onClick={show}
                                         variant="outline"
                                         size="sm"
                                         className={!dark ?
@@ -76,29 +69,11 @@ export const CustomConnectButton = ({
                                             `flex items-center gap-2 text-black border-t border-black`
                                         }
                                     >
-                                        {chain.hasIcon && (
-                                            <div
-                                                className="w-4 h-4 rounded-full overflow-hidden"
-                                                style={{
-                                                    background: chain.iconBackground,
-                                                }}
-                                            >
-                                                {chain.iconUrl && (
-                                                    <Image
-                                                        alt={chain.name ?? 'Chain icon'}
-                                                        src={chain.iconUrl}
-                                                        className="w-4 h-4"
-                                                        width={20}
-                                                        height={20}
-                                                    />
-                                                )}
-                                            </div>
-                                        )}
                                         {chain.name}
                                     </Button>
 
                                     <Button
-                                        onClick={openAccountModal}
+                                        onClick={show}
                                         variant="outline"
                                         size="sm"
                                         className={!dark ?
@@ -106,10 +81,7 @@ export const CustomConnectButton = ({
                                             `font-medium text-black border-t border-black`
                                         }
                                     >
-                                        {account.displayName}
-                                        {account.displayBalance
-                                            ? ` (${account.displayBalance})`
-                                            : ''}
+                                        {ensName || truncatedAddress}
                                     </Button>
                                 </div>
                             );
@@ -117,6 +89,6 @@ export const CustomConnectButton = ({
                     </div>
                 );
             }}
-        </ConnectButton.Custom>
+        </ConnectKitButton.Custom>
     );
 };

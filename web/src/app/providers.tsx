@@ -1,19 +1,45 @@
 'use client'
 
-import { WagmiProvider, createConfig, http } from 'wagmi'
-import { optimismSepolia, neoxT4, neoxMainnet } from 'wagmi/chains'
+import { WagmiProvider, http } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ConnectKitProvider } from "connectkit";
 import { RainbowKitProvider, getDefaultConfig, darkTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
+
+
+const lensTestnet = {
+    id: 37111,
+    name: 'Lens Network Sepolia Testnet',
+    network: 'lens-testnet',
+    nativeCurrency: {
+        decimals: 18,
+        name: 'GRASS',
+        symbol: 'GRASS',
+    },
+    rpcUrls: {
+        default: {
+            http: ['https://rpc.testnet.lens.dev'],
+        },
+        public: {
+            http: ['https://rpc.testnet.lens.dev'],
+        },
+    },
+    blockExplorers: {
+        default: {
+            name: 'Block Explorer',
+            url: 'https://block-explorer.testnet.lens.dev',
+        },
+    },
+} as const
+
 
 export const config = getDefaultConfig({
     appName: 'Radish',
     projectId: '066465a4f5d400c9eccad76612f98c5a', // Get one at https://cloud.walletconnect.com
-    chains: [optimismSepolia, neoxT4, neoxMainnet],
+    chains: [lensTestnet],
     transports: {
-        [optimismSepolia.id]: http(),
-        [neoxT4.id]: http(),
-        [neoxMainnet.id]: http(),
+
+        [lensTestnet.id]: http(),
     }
 })
 
@@ -29,8 +55,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     borderRadius: "medium",
                     fontStack: "system",
                     overlayBlur: "small",
-                })} initialChain={neoxMainnet}>
-                    {children}
+                })} initialChain={lensTestnet}>
+                    <ConnectKitProvider>{children}</ConnectKitProvider>
                 </RainbowKitProvider>
             </QueryClientProvider>
         </WagmiProvider>

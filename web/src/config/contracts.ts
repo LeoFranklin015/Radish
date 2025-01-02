@@ -1,6 +1,7 @@
 export const OPTIMISM_SEPOLIA_CHAIN_ID = 11155420;
 export const NEOX_TESTNET_CHAIN_ID = 12227332;
 export const NEOX_MAINNET_CHAIN_ID = 47763;
+export const LENS_TESTNET_CHAIN_ID = 37111;
 
 export const SUBGRAPH_URL: {
   [key: number]: string;
@@ -11,6 +12,8 @@ export const SUBGRAPH_URL: {
     "https://api.studio.thegraph.com/query/73364/radish-testnet/version/latest",
   [NEOX_MAINNET_CHAIN_ID]:
     "https://api.studio.thegraph.com/query/73364/radish-mainnet/version/latest",
+  [LENS_TESTNET_CHAIN_ID]:
+    "https://api.studio.thegraph.com/query/73364/radish-lens-testnet/version/latest",
 };
 
 export const CONTRACT_ADDRESSES: {
@@ -33,6 +36,12 @@ export const CONTRACT_ADDRESSES: {
     mockERC20: "0x4a31Ce110F74D134DD7C948D6E8197341d0FE361",
     yesToken: "0xC889816314D3A0EaC3e4C304eD1E54847a309821",
     noToken: "0xe1462B0dF1210182980907127ff71745014A7F94",
+  },
+  [LENS_TESTNET_CHAIN_ID]: {
+    radishCore: "0x3B927596f629f4307B4712635c29a4Fa7788B554",
+    mockERC20: "0x6Fc773968759345799b910E8E3134068625eE912",
+    noToken: "0x53b30DbC983D2C5FDff400B2B77fB288136d19B4",
+    yesToken: "0xb60Ec2363CfefA78Fa7C7A269859d2B3D8c8C9F7",
   },
 };
 
