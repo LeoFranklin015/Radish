@@ -1,0 +1,8 @@
+{
+  "lens-testnet": {
+    "RadishCore": {
+      "address": "0x9Dfa8291de62973D816b9c7a5218BcAe84CDBb30",
+      "startBlock": 123100
+    }
+  }
+}
