@@ -422,14 +422,6 @@ export default function MarketPage() {
                   </div>
                   {address.toLowerCase() ==
                     market.creatorHandle.toLowerCase() && (
-                    // <Button
-                    //   onClick={handleResolution}
-                    //   className="w-full text-white"
-                    //   variant="destructive"
-                    //   disabled={actionLoading}
-                    // >
-                    //   {actionLoading ? "Resolving..." : `Resolve Market`}
-                    // </Button>
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
