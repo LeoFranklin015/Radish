@@ -19,6 +19,28 @@ import {
 import { useChainId } from "wagmi";
 import { parseEther } from "viem";
 
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Label } from "@/components/ui/label";
+
 // Dynamically import TradingView chart to avoid SSR issues
 const TradingViewWidget = dynamic(
   () => import("@/components/TradingViewWidget"),
@@ -90,6 +112,7 @@ export default function MarketPage() {
   const [amount, setAmount] = useState("");
   const [estimatedCost, setEstimatedCost] = useState(0);
   const [trades, setTrades] = useState<Trade[]>([]);
+  const [resolveValue, setResolveValue] = useState("Yes");
 
   const getMarketPrice = (type: string) => {
     if (type === "yes") {
@@ -149,10 +172,10 @@ export default function MarketPage() {
     setEstimatedCost(numericAmount * price);
   };
 
-  const handleTrade = async (tradeType: 'buy' | 'sell') => {
+  const handleTrade = async (tradeType: "buy" | "sell") => {
     if (!market || !amount) return;
     try {
-      if (tradeType === 'buy') {
+      if (tradeType === "buy") {
         if (activeTab === "yes") {
           await buy(true, parseFloat(amount), market.contractAddress);
         } else {
@@ -201,7 +224,7 @@ export default function MarketPage() {
         chainId: chainId as any,
         args: [address as `0x${string}`, parseEther("1000")],
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   if (marketLoading) {
@@ -258,9 +281,11 @@ export default function MarketPage() {
             >
               Faucet xUSDC
             </Button>
-            {!address && <div className="justify-end">
-              <CustomConnectButton dark />
-            </div>}
+            {!address && (
+              <div className="justify-end">
+                <CustomConnectButton dark />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -344,9 +369,11 @@ export default function MarketPage() {
                     </Button>
                     <div className="grid grid-cols-2 gap-4">
                       <Button
-                        onClick={(e) => handleTrade('buy')}
+                        onClick={(e) => handleTrade("buy")}
                         className="w-full text-white"
-                        variant={activeTab === "yes" ? "success" : "destructive"}
+                        variant={
+                          activeTab === "yes" ? "success" : "destructive"
+                        }
                         disabled={actionLoading || !amount}
                       >
                         {actionLoading
@@ -354,9 +381,11 @@ export default function MarketPage() {
                           : `Buy ${activeTab.toUpperCase()}`}
                       </Button>
                       <Button
-                        onClick={(e) => handleTrade('sell')}
+                        onClick={(e) => handleTrade("sell")}
                         className="w-full text-white"
-                        variant={activeTab === "yes" ? "success" : "destructive"}
+                        variant={
+                          activeTab === "yes" ? "success" : "destructive"
+                        }
                         disabled={actionLoading || !amount}
                       >
                         {actionLoading
@@ -393,15 +422,84 @@ export default function MarketPage() {
                   </div>
                   {address.toLowerCase() ==
                     market.creatorHandle.toLowerCase() && (
-                      <Button
-                        onClick={handleResolution}
-                        className="w-full text-white"
-                        variant="destructive"
-                        disabled={actionLoading}
-                      >
-                        {actionLoading ? "Resolving..." : `Resolve Market`}
-                      </Button>
-                    )}
+                    // <Button
+                    //   onClick={handleResolution}
+                    //   className="w-full text-white"
+                    //   variant="destructive"
+                    //   disabled={actionLoading}
+                    // >
+                    //   {actionLoading ? "Resolving..." : `Resolve Market`}
+                    // </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          className="w-full text-white"
+                          disabled={actionLoading}
+                        >
+                          {actionLoading
+                            ? "Resolving..."
+                            : "Resolve the market"}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Resolving the market</DialogTitle>
+                          <DialogDescription>
+                            Are you sure you want to resolve this market?
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="flex items-center space-x-2">
+                          <div className="grid flex-1 gap-2">
+                            <Label htmlFor="proof" className="sr-only">
+                              Proof
+                            </Label>
+                            <Input
+                              id="proof"
+                              placeholder="Enter the proof here"
+                            />
+                            <Label htmlFor="proof" className="sr-only">
+                              Favour
+                            </Label>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="outline">Favour</Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>
+                                  Choose Who won
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuRadioGroup
+                                  value={resolveValue}
+                                  onValueChange={setResolveValue}
+                                >
+                                  <DropdownMenuRadioItem value="Yes">
+                                    Yes
+                                  </DropdownMenuRadioItem>
+                                  <DropdownMenuRadioItem value="No">
+                                    No
+                                  </DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </div>
+                        <DialogFooter className="sm:justify-start">
+                          <DialogClose asChild>
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              onClick={handleResolution}
+                              disabled={actionLoading}
+                            >
+                              {actionLoading ? "Resolving..." : "Resolve"}
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </div>
               </div>
             )}

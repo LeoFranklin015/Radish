@@ -6,42 +6,42 @@ export const LENS_TESTNET_CHAIN_ID = 37111;
 export const SUBGRAPH_URL: {
   [key: number]: string;
 } = {
-  [OPTIMISM_SEPOLIA_CHAIN_ID]:
-    "https://api.studio.thegraph.com/query/73364/radish/version/latest",
-  [NEOX_TESTNET_CHAIN_ID]:
-    "https://api.studio.thegraph.com/query/73364/radish-testnet/version/latest",
-  [NEOX_MAINNET_CHAIN_ID]:
-    "https://api.studio.thegraph.com/query/73364/radish-mainnet/version/latest",
+  // [OPTIMISM_SEPOLIA_CHAIN_ID]:
+  //   "https://api.studio.thegraph.com/query/73364/radish/version/latest",
+  // [NEOX_TESTNET_CHAIN_ID]:
+  //   "https://api.studio.thegraph.com/query/73364/radish-testnet/version/latest",
+  // [NEOX_MAINNET_CHAIN_ID]:
+  //   "https://api.studio.thegraph.com/query/73364/radish-mainnet/version/latest",
   [LENS_TESTNET_CHAIN_ID]:
-    "https://api.studio.thegraph.com/query/73364/radish-lens-testnet/version/latest",
+    "https://api.studio.thegraph.com/query/73364/radish-lens/version/latest",
 };
 
 export const CONTRACT_ADDRESSES: {
   [key: number]: { [key: string]: `0x${string}` };
 } = {
-  [OPTIMISM_SEPOLIA_CHAIN_ID]: {
-    radishCore: "0xEb9F9b7719f2f1d816fa01aCfc0e80241261779C",
-    mockERC20: "0xC6897b67b320bfBA53Ef3ADe6E69A7DA5C49789E",
-    yesToken: "0xcf1fFf035Ca960119D915c97524b828832D8d3a8",
-    noToken: "0x59b8d2771ddA615F117FB24Ff942b0A978dd14de",
-  },
-  [NEOX_TESTNET_CHAIN_ID]: {
-    radishCore: "0x3B927596f629f4307B4712635c29a4Fa7788B554",
-    mockERC20: "0x6Fc773968759345799b910E8E3134068625eE912",
-    noToken: "0x53b30DbC983D2C5FDff400B2B77fB288136d19B4",
-    yesToken: "0xb60Ec2363CfefA78Fa7C7A269859d2B3D8c8C9F7",
-  },
-  [NEOX_MAINNET_CHAIN_ID]: {
-    radishCore: "0x1d2DBf7C3F28D21B41fbe7bd335a51cB37f61a11",
-    mockERC20: "0x4a31Ce110F74D134DD7C948D6E8197341d0FE361",
-    yesToken: "0xC889816314D3A0EaC3e4C304eD1E54847a309821",
-    noToken: "0xe1462B0dF1210182980907127ff71745014A7F94",
-  },
+  // [OPTIMISM_SEPOLIA_CHAIN_ID]: {
+  //   radishCore: "0xEb9F9b7719f2f1d816fa01aCfc0e80241261779C",
+  //   mockERC20: "0xC6897b67b320bfBA53Ef3ADe6E69A7DA5C49789E",
+  //   yesToken: "0xcf1fFf035Ca960119D915c97524b828832D8d3a8",
+  //   noToken: "0x59b8d2771ddA615F117FB24Ff942b0A978dd14de",
+  // },
+  // [NEOX_TESTNET_CHAIN_ID]: {
+  //   radishCore: "0x3B927596f629f4307B4712635c29a4Fa7788B554",
+  //   mockERC20: "0x6Fc773968759345799b910E8E3134068625eE912",
+  //   noToken: "0x53b30DbC983D2C5FDff400B2B77fB288136d19B4",
+  //   yesToken: "0xb60Ec2363CfefA78Fa7C7A269859d2B3D8c8C9F7",
+  // },
+  // [NEOX_MAINNET_CHAIN_ID]: {
+  //   radishCore: "0x1d2DBf7C3F28D21B41fbe7bd335a51cB37f61a11",
+  //   mockERC20: "0x4a31Ce110F74D134DD7C948D6E8197341d0FE361",
+  //   yesToken: "0xC889816314D3A0EaC3e4C304eD1E54847a309821",
+  //   noToken: "0xe1462B0dF1210182980907127ff71745014A7F94",
+  // },
   [LENS_TESTNET_CHAIN_ID]: {
-    radishCore: "0x3B927596f629f4307B4712635c29a4Fa7788B554",
-    mockERC20: "0x6Fc773968759345799b910E8E3134068625eE912",
-    noToken: "0x53b30DbC983D2C5FDff400B2B77fB288136d19B4",
-    yesToken: "0xb60Ec2363CfefA78Fa7C7A269859d2B3D8c8C9F7",
+    radishCore: "0x9Dfa8291de62973D816b9c7a5218BcAe84CDBb30",
+    mockERC20: "0x11F85C74D9A1675597349D1b8F4ED384122B9Fb4",
+    noToken: "0xdE473b335AbDf221e78aa15e1A85734b7BfDF59e",
+    yesToken: "0xd264E76AfB8e6e06Dbe28Bf1F0ca087862C829ED",
   },
 };
 
