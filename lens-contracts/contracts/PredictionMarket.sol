@@ -150,12 +150,18 @@ event RewardClaimed(
         return interfaceId == type(IERC1155Receiver).interfaceId;
     }
 
-    function resolve() public onlyResolver {
-        require(block.timestamp >= market.endTime, "Market has not ended");
+    function resolve(bool isYesWon , bytes calldata proof) public onlyResolver {
+        // DISABLED TO SHOW DEMO. ENABLE FOR PRODUCTION
+        // require(block.timestamp >= market.endTime, "Market has not ended");
+
+        // TODO: Verify proof here 
+        // verifier.verifyProof(market.id, isYesWon, proof);
+
         require(!market.resolved, "Market already resolved");
 
+
         market.resolved = true;
-        market.won = market.totalYes > market.totalNo;
+        market.won =isYesWon;
         market.totalPriceToken = priceToken.balanceOf(address(this));
 
         emit MarketResolved(market.id, market.won , market.totalPriceToken);
@@ -327,7 +333,9 @@ event RewardClaimed(
     }
 
     function claimReward() public {
-        require(market.resolved, "Market not resolved");
+
+        // DISABLED TO SHOW DEMO. ENABLE FOR PRODUCTION
+        // require(market.resolved, "Market not resolved");
 
         uint256 reward = 0;
         if (market.won) {
