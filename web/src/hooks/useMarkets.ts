@@ -407,21 +407,29 @@ export function useMarketActions(marketId: string) {
       });
     },
 
-    resolve: async (address: `0x${string}`) => {
-      await resolve({
-        address: address,
-        abi: PREDICTION_MARKET_ABI,
-        functionName: "resolve",
-        chainId: chainId as any,
-      });
-    },
-
     claim: async (address: `0x${string}`) => {
       await claim({
         address: address,
         abi: PREDICTION_MARKET_ABI,
         functionName: "claimReward",
         chainId: chainId as any,
+      });
+    },
+
+    resolve: async (
+      address: `0x${string}`,
+      proof: string,
+      resolution: boolean
+    ) => {
+      await resolve({
+        address: address,
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "resolve",
+        chainId: chainId as any,
+        args: [
+          resolution,
+          "0x9a0d37f2b5a77e9f3c75b2a3a27b99c7c1c8d4ac8d7b91e39f94a85354882c56", // Replace with actual proof , In here we currently dont have prrof
+        ],
       });
     },
     isLoading:

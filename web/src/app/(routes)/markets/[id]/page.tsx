@@ -14,6 +14,7 @@ import { request, gql } from "graphql-request";
 import {
   CONTRACT_ADDRESSES,
   ERC20_ABI,
+  PREDICTION_MARKET_ABI,
   SUBGRAPH_URL,
 } from "@/config/contracts";
 import { useChainId } from "wagmi";
@@ -40,6 +41,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Label } from "@/components/ui/label";
+import { readContract } from "@wagmi/core";
+import { config } from "@/app/providers";
 
 // Dynamically import TradingView chart to avoid SSR issues
 const TradingViewWidget = dynamic(
@@ -111,8 +114,10 @@ export default function MarketPage() {
   const [activeTab, setActiveTab] = useState("yes");
   const [amount, setAmount] = useState("");
   const [estimatedCost, setEstimatedCost] = useState(0);
+  const [maxCost, setMaxCost] = useState(0);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [resolveValue, setResolveValue] = useState("Yes");
+  const [proof, setProof] = useState("");
 
   const getMarketPrice = (type: string) => {
     if (type === "yes") {
@@ -163,13 +168,24 @@ export default function MarketPage() {
     fetchData();
   }, [id]);
 
-  const handleAmountChange = (value: string) => {
+  const handleAmountChange = async (value: string) => {
     setAmount(value);
     if (!market) return;
     // Calculate estimated cost using market prices
     const numericAmount = parseFloat(value) || 0;
     const price = activeTab === "yes" ? market.yesPrice : market.noPrice;
     setEstimatedCost(numericAmount * price);
+
+    // Calculate max cost using market prices
+    if (numericAmount !== 0) {
+      const maxCost = await readContract(config, {
+        address: market.contractAddress,
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "getCost",
+        args: [true, BigInt(numericAmount * 1e18)],
+      });
+      setMaxCost(Number(maxCost) / 1e18);
+    }
   };
 
   const handleTrade = async (tradeType: "buy" | "sell") => {
@@ -205,7 +221,14 @@ export default function MarketPage() {
   const handleResolution = async () => {
     if (!market) return;
     try {
-      await resolve(market.contractAddress);
+      let resolution;
+      if (resolveValue === "Yes") {
+        resolution = true;
+      } else {
+        resolution = false;
+      }
+      console.log(resolution);
+      await resolve(market.contractAddress, proof, resolution);
     } catch (err) {
       console.error("Resolution failed:", err);
     }
@@ -333,7 +356,7 @@ export default function MarketPage() {
                   <div className="space-y-4 mt-6">
                     <div>
                       <label className="text-sm font-medium text-zinc-300">
-                        Amount (USDC)
+                        No of Shares
                       </label>
                       <Input
                         type="number"
@@ -353,7 +376,7 @@ export default function MarketPage() {
                       <div className="flex justify-between text-zinc-300">
                         <span>Max Payout:</span>
                         <span className="text-white">
-                          ${(parseFloat(amount) || 0).toFixed(2)} USDC
+                          ${(maxCost || 0).toFixed(2)} USDC
                         </span>
                       </div>
                     </div>
@@ -449,6 +472,8 @@ export default function MarketPage() {
                             <Input
                               id="proof"
                               placeholder="Enter the proof here"
+                              onChange={(e) => setProof(e.target.value)}
+                              className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
                             />
                             <Label htmlFor="proof" className="sr-only">
                               Favour

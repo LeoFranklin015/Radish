@@ -1023,7 +1023,18 @@ export const PREDICTION_MARKET_ABI = [
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "bool",
+        name: "isYesWon",
+        type: "bool",
+      },
+      {
+        internalType: "bytes",
+        name: "proof",
+        type: "bytes",
+      },
+    ],
     name: "resolve",
     outputs: [],
     stateMutability: "nonpayable",

@@ -11,8 +11,12 @@ import { useAccount } from "wagmi";
 import { useChainId } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { useMarketActions } from "@/hooks/useMarkets";
-import { CONTRACT_ADDRESSES, TOKENSABI } from "@/config/contracts";
-import { readContract } from "@wagmi/core";
+import {
+  CONTRACT_ADDRESSES,
+  PREDICTION_MARKET_ABI,
+  TOKENSABI,
+} from "@/config/contracts";
+import { readContract, writeContract } from "@wagmi/core";
 import { config } from "@/app/providers";
 import { getPosition } from "@/hooks/getPosition";
 
@@ -55,6 +59,7 @@ export default function MyPredictionsPage() {
   const chainId = useChainId();
   const [userPredictions, setUserPredictions] = useState<Prediction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClaiming, setClaiming] = useState(false);
 
   const fetchPredictions = async () => {
     if (!address) return;
@@ -105,9 +110,14 @@ export default function MyPredictionsPage() {
   const combinedPredictions = [...mockPredictions, ...userPredictions];
 
   const handleClaim = async (pred: Prediction) => {
+    setClaiming(true);
     console.log("Claiming winnings...", pred);
-    const { claim } = useMarketActions(pred.marketId); // eslint-disable-line
-    await claim(pred.contractAddress as `0x${string}`);
+    await writeContract(config, {
+      address: pred.contractAddress as `0x${string}`,
+      abi: PREDICTION_MARKET_ABI,
+      functionName: "claimReward",
+    });
+    setClaiming(false);
   };
 
   return (
@@ -180,10 +190,11 @@ export default function MyPredictionsPage() {
                 </div>
               </div>
               <div className="flex w-full justify-between text-sm border-t pt-4 border-zinc-700">
-                {!pred.resolved && (
+                {pred.resolved && (
                   <Button
                     className="text-black"
                     onClick={() => handleClaim(pred)}
+                    disabled={isClaiming}
                   >
                     Claim Winnings
                   </Button>
