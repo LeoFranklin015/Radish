@@ -338,21 +338,34 @@ event RewardClaimed(
         // require(market.resolved, "Market not resolved");
 
         uint256 reward = 0;
+        uint256 userBalance;
+        uint256 totalWinningStake = market.won ? market.totalYes : market.totalNo;
+
+        require(totalWinningStake > 0, "No winning stake");
+
         if (market.won) {
-            uint256 balance = yesToken.balanceOf(msg.sender, market.id);
-            require(balance > 0, "No YES tokens held");
-            reward = (balance * market.totalPriceToken) / market.totalYes;
-            yesToken.burn(msg.sender, market.id, balance);
+            userBalance = yesToken.balanceOf(msg.sender, market.id);
         } else {
-            uint256 balance = noToken.balanceOf(msg.sender, market.id);
-            require(balance > 0, "No NO tokens held");
-            reward = (balance * market.totalPriceToken) / market.totalNo;
-            noToken.burn(msg.sender, market.id, balance);
+            userBalance = noToken.balanceOf(msg.sender, market.id);
         }
 
+        require(userBalance > 0, "No tokens held to claim rewards");
+
+        // Calculate user's share of the reward pool
+        uint256 rewardPool = market.totalPriceToken;
+        reward = (userBalance * rewardPool) / totalWinningStake;
+
+        // Transfer reward to user
         require(priceToken.transfer(msg.sender, reward), "Payment failed");
 
-        emit RewardClaimed(msg.sender, market.id,reward);
+        // Burn user's prediction tokens
+        if (market.won) {
+            yesToken.burn(msg.sender, market.id, userBalance);
+        } else {
+            noToken.burn(msg.sender, market.id, userBalance);
+        }
+
+        emit RewardClaimed(msg.sender, market.id, reward);
     }
 
     // Emergency function to add liquidity if needed
