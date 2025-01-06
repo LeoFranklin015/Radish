@@ -9,13 +9,15 @@ import { CustomConnectButton } from "@/components/ui/CustomConnectButton";
 const features = [
   {
     title: "Prediction Markets",
-    description: "Place bets on creator growth metrics and rivalry outcomes across major platforms",
+    description:
+      "Place bets on creator growth metrics and rivalry outcomes across major platforms",
     icon: "🎯",
     bgColor: "from-green-500/20 to-green-500/10",
   },
   {
     title: "Decentralized & Verifiable",
-    description: "Built on NeoX Blockchain with zktls enabled proofs for secure data verification",
+    description:
+      "Built on Lens Blockchain with zktls enabled proofs for secure data verification",
     icon: "⛓️",
     bgColor: "from-blue-500/20 to-blue-500/10",
   },
@@ -27,7 +29,8 @@ const features = [
   },
   {
     title: "Community-Driven",
-    description: "Actively participate in and benefit from creator growth dynamics",
+    description:
+      "Actively participate in and benefit from creator growth dynamics",
     icon: "👥",
     bgColor: "from-pink-500/20 to-pink-500/10",
   },
@@ -36,7 +39,8 @@ const features = [
 const futureFeatures = [
   {
     title: "Platform Expansion",
-    description: "Integration with emerging platforms like Instagram Threads, Twitch, and Patreon",
+    description:
+      "Integration with emerging platforms like Instagram Threads, Twitch, and Patreon",
     icon: "🚀",
     bgColor: "from-orange-500/20 to-orange-500/10",
   },
@@ -54,7 +58,7 @@ const futureFeatures = [
   },
   {
     title: "Oracle Integration",
-    description: "Robust Neo-supported Data oracle systems for market resolution",
+    description: "Robust Data oracle systems for market resolution",
     icon: "🔮",
     bgColor: "from-indigo-500/20 to-indigo-500/10",
   },
@@ -161,12 +165,10 @@ export default function Home() {
               variants={item}
               className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto"
             >
-              The first decentralized prediction market where fans bet on their favorite content creators&apos; milestones and rivalries
+              The first decentralized prediction market where fans bet on their
+              favorite content creators&apos; milestones and rivalries
             </motion.p>
-            <motion.div
-              variants={item}
-              className="flex gap-4 justify-center"
-            >
+            <motion.div variants={item} className="flex gap-4 justify-center">
               <Link href="/markets">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
@@ -330,7 +332,7 @@ export default function Home() {
                 variants={item}
                 whileHover={{
                   scale: 1.05,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 className={`p-8 rounded-2xl bg-gradient-to-br ${feature.bgColor} backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all cursor-pointer relative group`}
               >
@@ -393,7 +395,7 @@ export default function Home() {
                 variants={item}
                 whileHover={{
                   scale: 1.05,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 className={`p-8 rounded-2xl bg-white shadow-xl hover:shadow-2xl transition-all cursor-pointer relative group overflow-hidden`}
               >
@@ -456,12 +458,10 @@ export default function Home() {
             variants={item}
             className="text-xl text-zinc-600 max-w-2xl mx-auto"
           >
-            Start trading on creator milestones and be part of the next evolution in social-fi
+            Start trading on creator milestones and be part of the next
+            evolution in social-fi
           </motion.p>
-          <motion.div
-            variants={item}
-            className="flex gap-4 justify-center"
-          >
+          <motion.div variants={item} className="flex gap-4 justify-center">
             <Link href="/markets">
               <motion.div
                 whileHover={{ scale: 1.05 }}
