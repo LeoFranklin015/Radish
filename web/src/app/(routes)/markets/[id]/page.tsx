@@ -148,7 +148,7 @@ export default function MarketPage() {
                 `
       );
       console.log(data.orders);
-      data.orders.map((order: any) => {
+      const latestTrades = data.orders.map((order: any) => {
         const trade: Trade = {
           type: order.type.toLowerCase(),
           outcome: order.tokenType.toLowerCase(),
@@ -157,8 +157,9 @@ export default function MarketPage() {
           timestamp: new Date(order.timestamp * 1000).toDateString(),
           trader: order.user.id,
         };
-        setTrades((prevTrades) => [...prevTrades, trade]);
+        return trade;
       });
+      setTrades(latestTrades);
     } catch (err) {
       console.error("Fetch data failed:", err);
     }
@@ -171,20 +172,34 @@ export default function MarketPage() {
   const handleAmountChange = async (value: string) => {
     setAmount(value);
     if (!market) return;
-    // Calculate estimated cost using market prices
-    const numericAmount = parseFloat(value) || 0;
-    const price = activeTab === "yes" ? market.yesPrice : market.noPrice;
-    setEstimatedCost(numericAmount * price);
 
-    // Calculate max cost using market prices
+    const numericAmount = parseFloat(value) || 0;
+
     if (numericAmount !== 0) {
-      const maxCost = await readContract(config, {
-        address: market.contractAddress,
-        abi: PREDICTION_MARKET_ABI,
-        functionName: "getCost",
-        args: [true, BigInt(numericAmount * 1e18)],
-      });
-      setMaxCost(Number(maxCost) / 1e18);
+      try {
+        // Get the actual cost from the smart contract for both yes and no tokens
+        const cost = await readContract(config, {
+          address: market.contractAddress,
+          abi: PREDICTION_MARKET_ABI,
+          functionName: "getCost",
+          args: [activeTab === "yes", BigInt(numericAmount * 1e18)],
+        });
+
+        // Convert the returned cost from wei to USDC (18 decimals)
+        const actualCost = Number(cost) / 1e18;
+
+        // Update both estimated and max cost to be the same since this is the actual cost
+        setEstimatedCost(actualCost);
+        setMaxCost(actualCost);
+
+      } catch (error) {
+        console.error("Error calculating cost:", error);
+        setEstimatedCost(0);
+        setMaxCost(0);
+      }
+    } else {
+      setEstimatedCost(0);
+      setMaxCost(0);
     }
   };
 
@@ -247,7 +262,7 @@ export default function MarketPage() {
         chainId: chainId as any,
         args: [address as `0x${string}`, parseEther("1000")],
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   if (marketLoading) {
@@ -333,6 +348,12 @@ export default function MarketPage() {
               </div>
             ) : (
               <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h1 className="text-2xl font-semibold">Yes</h1>
+                  <p className="text-zinc-400 text-xl font-semibold">
+                    {market.yesPrice.toFixed(3) * 100} % chance
+                  </p>
+                </div>
                 <Tabs
                   value={activeTab}
                   onValueChange={setActiveTab}
@@ -368,15 +389,15 @@ export default function MarketPage() {
                     </div>
                     <div className="text-sm space-y-2">
                       <div className="flex justify-between text-zinc-300">
-                        <span>Estimated Cost:</span>
+                        <span>Cost:</span>
                         <span className="text-white">
                           ${estimatedCost.toFixed(2)} USDC
                         </span>
                       </div>
                       <div className="flex justify-between text-zinc-300">
-                        <span>Max Payout:</span>
+                        <span>Number of Shares:</span>
                         <span className="text-white">
-                          ${(maxCost || 0).toFixed(2)} USDC
+                          {amount || "0"}
                         </span>
                       </div>
                     </div>
@@ -445,78 +466,78 @@ export default function MarketPage() {
                   </div>
                   {address.toLowerCase() ==
                     market.creatorHandle.toLowerCase() && (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          className="w-full text-white"
-                          disabled={actionLoading}
-                        >
-                          {actionLoading
-                            ? "Resolving..."
-                            : "Resolve the market"}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                          <DialogTitle>Resolving the market</DialogTitle>
-                          <DialogDescription>
-                            Are you sure you want to resolve this market?
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex items-center space-x-2">
-                          <div className="grid flex-1 gap-2">
-                            <Label htmlFor="proof" className="sr-only">
-                              Proof
-                            </Label>
-                            <Input
-                              id="proof"
-                              placeholder="Enter the proof here"
-                              onChange={(e) => setProof(e.target.value)}
-                              className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
-                            />
-                            <Label htmlFor="proof" className="sr-only">
-                              Favour
-                            </Label>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="outline">Favour</Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="w-56">
-                                <DropdownMenuLabel>
-                                  Choose Who won
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuRadioGroup
-                                  value={resolveValue}
-                                  onValueChange={setResolveValue}
-                                >
-                                  <DropdownMenuRadioItem value="Yes">
-                                    Yes
-                                  </DropdownMenuRadioItem>
-                                  <DropdownMenuRadioItem value="No">
-                                    No
-                                  </DropdownMenuRadioItem>
-                                </DropdownMenuRadioGroup>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            className="w-full text-white"
+                            disabled={actionLoading}
+                          >
+                            {actionLoading
+                              ? "Resolving..."
+                              : "Resolve the market"}
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Resolving the market</DialogTitle>
+                            <DialogDescription>
+                              Are you sure you want to resolve this market?
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="flex items-center space-x-2">
+                            <div className="grid flex-1 gap-2">
+                              <Label htmlFor="proof" className="sr-only">
+                                Proof
+                              </Label>
+                              <Input
+                                id="proof"
+                                placeholder="Enter the proof here"
+                                onChange={(e) => setProof(e.target.value)}
+                                className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                              />
+                              <Label htmlFor="proof" className="sr-only">
+                                Favour
+                              </Label>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="outline">Favour</Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56">
+                                  <DropdownMenuLabel>
+                                    Choose Who won
+                                  </DropdownMenuLabel>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuRadioGroup
+                                    value={resolveValue}
+                                    onValueChange={setResolveValue}
+                                  >
+                                    <DropdownMenuRadioItem value="Yes">
+                                      Yes
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="No">
+                                      No
+                                    </DropdownMenuRadioItem>
+                                  </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
                           </div>
-                        </div>
-                        <DialogFooter className="sm:justify-start">
-                          <DialogClose asChild>
-                            <Button
-                              type="button"
-                              variant="secondary"
-                              onClick={handleResolution}
-                              disabled={actionLoading}
-                            >
-                              {actionLoading ? "Resolving..." : "Resolve"}
-                            </Button>
-                          </DialogClose>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  )}
+                          <DialogFooter className="sm:justify-start">
+                            <DialogClose asChild>
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={handleResolution}
+                                disabled={actionLoading}
+                              >
+                                {actionLoading ? "Resolving..." : "Resolve"}
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                 </div>
               </div>
             )}
