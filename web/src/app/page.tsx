@@ -9,12 +9,14 @@ import { CustomConnectButton } from "@/components/ui/CustomConnectButton";
 const features = [
   {
     title: "Prediction Markets",
-    description: "Place bets on creator growth metrics and rivalry outcomes across major platforms",
+    description:
+      "Place bets on creator growth metrics and rivalry outcomes across major platforms",
     icon: "🎯",
   },
   {
     title: "Decentralized & Verifiable",
-    description: "Built on NeoX Blockchain with zktls enabled proofs for secure data verification",
+    description:
+      "Built on Lens Blockchain with zktls enabled proofs for secure data verification",
     icon: "⛓️",
   },
   {
@@ -24,7 +26,8 @@ const features = [
   },
   {
     title: "Community-Driven",
-    description: "Actively participate in and benefit from creator growth dynamics",
+    description:
+      "Actively participate in and benefit from creator growth dynamics",
     icon: "👥",
   },
 ];
@@ -32,7 +35,8 @@ const features = [
 const futureFeatures = [
   {
     title: "Platform Expansion",
-    description: "Integration with emerging platforms like Instagram Threads, Twitch, and Patreon",
+    description:
+      "Integration with emerging platforms like Instagram Threads, Twitch, and Patreon",
     icon: "🚀",
   },
   {
@@ -47,7 +51,7 @@ const futureFeatures = [
   },
   {
     title: "Oracle Integration",
-    description: "Robust Neo-supported Data oracle systems for market resolution",
+    description: "Robust Data oracle systems for market resolution",
     icon: "🔮",
   },
 ];
@@ -72,7 +76,6 @@ const item = {
     },
   },
 };
-
 
 export default function Home() {
   return (
@@ -100,18 +103,19 @@ export default function Home() {
               variants={item}
               className="text-xl md:text-2xl text-zinc-300 max-w-3xl mx-auto"
             >
-              The first decentralized prediction market where fans bet on their favorite content creators&apos; milestones and rivalries
+              The first decentralized prediction market where fans bet on their
+              favorite content creators&apos; milestones and rivalries
             </motion.p>
-            <motion.div
-              variants={item}
-              className="flex gap-4 justify-center"
-            >
+            <motion.div variants={item} className="flex gap-4 justify-center">
               <Link href="/markets">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Button size="lg" className="text-lg px-8 bg-neo-green text-black hover:bg-neo-green/90">
+                  <Button
+                    size="lg"
+                    className="text-lg px-8 bg-neo-green text-black hover:bg-neo-green/90"
+                  >
                     Explore Markets
                   </Button>
                 </motion.div>
@@ -119,10 +123,7 @@ export default function Home() {
               <CustomConnectButton dark />
             </motion.div>
           </motion.div>
-          <motion.div
-            variants={item}
-            className="w-full max-w-4xl"
-          >
+          <motion.div variants={item} className="w-full max-w-4xl">
             <div className="relative w-full h-64 bg-zinc-800 rounded-xl overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-4xl">🎥</span>
@@ -162,10 +163,12 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-lg text-zinc-600 leading-relaxed"
           >
-            Creator rivalry has always entertained the masses - PewDiePie vs T-Series, KSI vs Logan Paul -
-            With RADISH, all this hype and fandom can be monetized through prediction markets that resolve
-            followers, subscribers & viewer counts. We&apos;re transforming the creator-fan relationship by
-            gamifying engagement and enabling fans to monetize their passion.
+            Creator rivalry has always entertained the masses - PewDiePie vs
+            T-Series, KSI vs Logan Paul - With RADISH, all this hype and fandom
+            can be monetized through prediction markets that resolve followers,
+            subscribers & viewer counts. We&apos;re transforming the creator-fan
+            relationship by gamifying engagement and enabling fans to monetize
+            their passion.
           </motion.p>
         </div>
       </motion.section>
@@ -197,7 +200,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{
                   scale: 1.05,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 className="p-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-all cursor-pointer"
               >
@@ -243,7 +246,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{
                   scale: 1.05,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 className="p-6 rounded-xl bg-white shadow-lg hover:shadow-xl transition-all cursor-pointer"
               >
@@ -277,22 +280,17 @@ export default function Home() {
           viewport={{ once: true }}
           className="space-y-8"
         >
-          <motion.h2
-            variants={item}
-            className="text-4xl font-bold"
-          >
+          <motion.h2 variants={item} className="text-4xl font-bold">
             Ready to Join the Future of Creator Markets?
           </motion.h2>
           <motion.p
             variants={item}
             className="text-xl text-zinc-600 max-w-2xl mx-auto"
           >
-            Start trading on creator milestones and be part of the next evolution in social-fi
+            Start trading on creator milestones and be part of the next
+            evolution in social-fi
           </motion.p>
-          <motion.div
-            variants={item}
-            className="flex gap-4 justify-center"
-          >
+          <motion.div variants={item} className="flex gap-4 justify-center">
             <Link href="/markets">
               <motion.div
                 whileHover={{ scale: 1.05 }}
