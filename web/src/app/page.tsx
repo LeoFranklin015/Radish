@@ -120,7 +120,6 @@ export default function Home() {
                   </Button>
                 </motion.div>
               </Link>
-              <CustomConnectButton dark />
             </motion.div>
           </motion.div>
           <motion.div variants={item} className="w-full max-w-4xl">
