@@ -36,7 +36,7 @@ RADISH combines the excitement of prediction markets with blockchain technology 
 - **Multi-Platform Integration**: Expand to include platforms like Instagram Threads, Twitch, and Patreon.
 - **Creator Rewards**: Develop a reward system to directly benefit content creators from fan engagement.
 - **Collaborations with Creators**: Partner with influencers to drive adoption and incentivize creators to engage with the platform.
-- **Optimized Data Oracles**: Implement a more robust integration with Neo-supported data oracles or an Optimistic Oracle for fully permissionless market resolution.
+- **Optimized Data Oracles**: Implement a more robust integration data oracles or an Optimistic Oracle for fully permissionless market resolution.
 
 ## Technical Details
 ### Advanced Market Making Mechanism
