@@ -1,34 +1,79 @@
-![image](https://github.com/user-attachments/assets/384c2bdd-d7ef-4f80-ab23-8726f9a57672)
+
+# RADISH: A New Paradigm in Social-Fi with Prediction Markets
+
+![image](https://github.com/user-attachments/assets/8f8964f7-733c-4888-8113-674a52ee519d)
 
 
-# radish
-RADISH is a app that enables new social-fi paradigm where fans get to bet on their favorite content creators on platforms like Youtube, Twitter and Tiktok. Creator rivalry has always entertained the masses greatly - Pewd vs T-series, KSI vs LoganPaul, etc - With radish - all this hype and fandom can be monetized through a prediction markets that resolve followers, subscribers & viewer counts.
+#### Team Members:
+- Fabian Ferno (superskywalker.lens)
+- Leo Franklin (leofranklin.lens)
 
-Features:
-- Prediction Markets: Fans can place bets on creator growth metrics and rivalry outcomes.
-- Monetization of Fandom: Capitalize on creator rivalries like PewDiePie vs. T-Series or KSI vs. Logan Paul.
-- Decentralized, Verifiable, Semi-permissionless: Built on NeoX Blockchain for secure, trustless transactions with zktls enabled proofs to verify data from secure Meta, Google, Tiktok APIs.
-- Community Engagement: Fans actively support and participate in creator growth dynamics.
+## Project Overview
+RADISH is a decentralized application (dApp) designed to revolutionize fan engagement in the creator economy. By introducing prediction markets where fans can bet on their favorite content creators' growth metrics, RADISH gamifies fandom and enables users to monetize their passion. Built on the Lens Network, RADISH is secure, trustless, and leverages cutting-edge technology for seamless operation.
 
-RADISH transforms the creator-fan relationship by gamifying engagement and enabling fans to monetize their passion for creators.
+## Intro
+We're a team of devs based in India who've been building different web3 products in various niches and problems. Quick flashback: We've been seeing different YouTubers like PewDiePie, T-Series, iShowSpeed, Mr. Beast, etc., have their internet battles on subscriber counts and fan hype streaks. An idea to transcend this engagement to a social finance primitive was the backstory of Radish - a platform for prediction markets to let fans bet and earn on the outcome of these social battles. While one can actually pull this off in a Polymarket, Radish lets anyone create these markets and resolve them with oracle APIs from YouTube, Instagram, TikTok APIs. It was very exciting for us to build Radish for the Lens Holidays Hackathon.
 
-Future plans:
-- **Multi-Platform Integration**: Expand beyond YouTube, Twitter, and TikTok to include emerging platforms like Instagram Threads, Twitch, and Patreon.
-- **Creator Rewards**: Implement a reward system where content creators benefit from their fans' engagement, fostering a symbiotic ecosystem.
-- **Collaborations with Creators**: Partner with influencers to promote RADISH, driving adoption and incentivizing content creators to engage with the platform.
-- More Robust integration with a Neo supported Data oracle systems or an Optimistic Oracle for fully permissionless market resolution
+## Submission for the Lens Holidays Web3 Hackathon
+We are proud to submit RADISH for the Lens Holidays Web3 Hackathon. This innovative dApp leverages the power of Web3 to redefine fan engagement in the creator economy. By combining prediction markets, blockchain technology, and creator-fan dynamics, RADISH is poised to set a new standard in Social-Fi applications.
 
 
+### Key Features
+- Advanced Market Making Mechanism
+	- We've implemented a sophisticated Logarithmic Market Scoring Rule (LMSR) for price discovery, which is more advanced than basic AMM implementations. This provides better price stability and liquidity management compared to simple constant product markets.
+- **Monetization of Fandom**: Capitalize on iconic creator rivalries like PewDiePie vs. T-Series or KSI vs. Logan Paul.
+- **Decentralized, Verifiable, Semi-Permissionless**: Powered by Lens Network with zk-enabled proofs for secure, trustless data verification from APIs like Meta, Google, and TikTok.
+- **Community Engagement**: Fans actively participate in the growth dynamics of their favorite creators.
 
-Deployed App: https://radish-neo.vercel.app/
-Testnet Deployment: 
-- radishCore: 0x3B927596f629f4307B4712635c29a4Fa7788B554"
-- mockERC20: 0x6Fc773968759345799b910E8E3134068625eE912"
-- noToken: "0x53b30DbC983D2C5FDff400B2B77fB288136d19B4"
-- yesToken: "0xb60Ec2363CfefA78Fa7C7A269859d2B3D8c8C9F7"
+### How RADISH Works
+RADISH combines the excitement of prediction markets with blockchain technology to provide fans with a unique way to support and engage with their favorite creators:
+1. Fans place bets on various creator milestones and rivalry outcomes.
+2. Market prices are determined using a sophisticated Logarithmic Market Scoring Rule (LMSR), ensuring price stability and efficient liquidity.
+3. Outcomes are resolved using decentralized data oracles, ensuring trustless and accurate results.
 
-Mainnet Deployment: 
-- radishCore: 0x1d2DBf7C3F28D21B41fbe7bd335a51cB37f61a11
-- mockERC20: 0x4a31Ce110F74D134DD7C948D6E8197341d0FE361
-- noToken: 0xe1462B0dF1210182980907127ff71745014A7F94
-- yesToken: 0xC889816314D3A0EaC3e4C304eD1E54847a309821
+## Future Roadmap
+- **Lens Embedded App Integration**: Enable users to place bets directly from a Lens Embedded App once integration is supported.
+- **Multi-Platform Integration**: Expand to include platforms like Instagram Threads, Twitch, and Patreon.
+- **Creator Rewards**: Develop a reward system to directly benefit content creators from fan engagement.
+- **Collaborations with Creators**: Partner with influencers to drive adoption and incentivize creators to engage with the platform.
+- **Optimized Data Oracles**: Implement a more robust integration with Neo-supported data oracles or an Optimistic Oracle for fully permissionless market resolution.
+
+## Technical Details
+### Advanced Market Making Mechanism
+RADISH employs a sophisticated Logarithmic Market Scoring Rule (LMSR) for price discovery. This advanced mechanism offers:
+- Improved price stability
+- Efficient liquidity management
+- Superior performance compared to basic Automated Market Maker (AMM) models
+
+### Core Architecture
+The RADISH dApp is powered by a modular and upgradeable architecture:
+- **RadishCore Contract**: Serves as a factory contract with automated market initialization, token contract management, and market registration.
+- **Upgradeable Components**: Ensures flexibility and scalability for future updates and features.
+
+
+## Why RADISH?
+RADISH transforms the traditional creator-fan relationship by:
+- Gamifying fan engagement through prediction markets
+- Providing a secure, decentralized platform for monetizing fandom
+- Offering creators a new avenue for growth and interaction with their audience
+
+
+
+### Source Code: 
+[GitHub](https://github.com/LeoFranklin015/Radish)
+
+### Preview
+https://radish-lens.vercel.app
+
+### Demo Video
+https://www.canva.com/design/DAGbXLFaQwE/z0NoDv6UvUD897wJ2IZOxw/watch
+
+### Slide Deck
+https://pitch.com/v/radish-lens-8r4bsm 
+
+### Screenshots
+![image](https://github.com/user-attachments/assets/b0548d4d-19e3-4750-a2b5-27317a3eea02)
+![image](https://github.com/user-attachments/assets/64c757d8-8106-4c5f-b903-fb7330241892)
+![image](https://github.com/user-attachments/assets/76ac735a-1323-4914-9495-83ee4426d9ad)
+![image](https://github.com/user-attachments/assets/7ce6d8c1-6d46-468a-9de5-baf0585d3d02)
+
