@@ -4,11 +4,16 @@ pragma solidity 0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {UD60x18, ud} from "@prb/math/src/UD60x18.sol";
 import "./NoToken.sol";
 import "./YesToken.sol";
 
-contract PredictionMarket is Ownable, IERC1155Receiver {
+contract PredictionMarket is Ownable, IERC1155Receiver, ReentrancyGuard, Pausable {
+    using SafeERC20 for IERC20;
+
     IERC20 public priceToken;
     YesToken public yesToken;
     NoToken public noToken;
@@ -82,6 +87,11 @@ event RewardClaimed(
         uint256 _endtime,
         address _creator
     ) Ownable(_creator) {
+        require(_priceToken != address(0), "Invalid price token");
+        require(_yesToken != address(0), "Invalid yes token");
+        require(_noToken != address(0), "Invalid no token");
+        require(_endtime > block.timestamp, "Invalid end time");
+        
         DECIMALS = ud(1e18);
         LIQUIDITY_PARAMETER = ud(10e18);
         priceToken = IERC20(_priceToken);
@@ -112,7 +122,7 @@ event RewardClaimed(
         _;
     }
 
-    function initializeLiquidity() public marketActive {
+    function initializeLiquidity() public marketActive nonReentrant whenNotPaused {
         require(
             qYes.unwrap() == 0 && qNo.unwrap() == 0,
             "Liquidity already initialized"
@@ -218,8 +228,9 @@ event RewardClaimed(
      * @param isYesToken Indicates if the token being purchased is YES (true) or NO (false).
      * @param amount The amount of tokens to purchase.
      */
-    function buy(bool isYesToken, UD60x18 amount) public marketActive {
+    function buy(bool isYesToken, UD60x18 amount) public marketActive nonReentrant whenNotPaused {
         require(amount.unwrap() > 0, "Amount must be greater than zero");
+        require(amount.unwrap() <= type(uint128).max, "Amount too large"); // Prevent overflow
 
         // Calculate cost using LMSR
         UD60x18 cost = getCost(isYesToken, amount);
@@ -237,13 +248,10 @@ event RewardClaimed(
             );
         }
 
-        // Transfer price token from user (removed duplicate transfer)
-        require(
-            priceToken.transferFrom(msg.sender, address(this), cost.unwrap()),
-            "Payment failed"
-        );
+        // Transfer price token from user using SafeERC20
+        priceToken.safeTransferFrom(msg.sender, address(this), cost.unwrap());
 
-        // Update state before transfer to prevent reentrancy
+        // Update state
         if (isYesToken) {
             qYes = qYes.add(amount);
             market.totalYes = market.totalYes + amount.unwrap();
@@ -272,11 +280,12 @@ event RewardClaimed(
             );
         }
 
-        emit TokenOperation(msg.sender, market.id, 1, isYesToken ? 1 : 2, amount.unwrap(),cost.unwrap());
+        emit TokenOperation(msg.sender, market.id, 1, isYesToken ? 1 : 2, amount.unwrap(), cost.unwrap());
     }
 
-    function sell(bool isYesToken, UD60x18 amount) public marketActive {
+    function sell(bool isYesToken, UD60x18 amount) public marketActive nonReentrant whenNotPaused {
         require(amount.unwrap() > 0, "Amount must be greater than zero");
+        require(amount.unwrap() <= type(uint128).max, "Amount too large"); // Prevent overflow
 
         // Calculate return amount
         UD60x18 returnAmount = getCost(isYesToken, amount);
@@ -294,7 +303,7 @@ event RewardClaimed(
             );
         }
 
-        // Update state before transfers
+        // Update state
         if (isYesToken) {
             qYes = qYes.sub(amount);
             market.totalYes = market.totalYes - amount.unwrap();
@@ -323,19 +332,14 @@ event RewardClaimed(
             );
         }
 
-        // Transfer price tokens back to user
-        require(
-            priceToken.transfer(msg.sender, returnAmount.unwrap()),
-            "Return payment failed"
-        );
+        // Transfer price tokens back to user using SafeERC20
+        priceToken.safeTransfer(msg.sender, returnAmount.unwrap());
 
-        emit TokenOperation(msg.sender,market.id, 2, isYesToken ? 1 : 2, amount.unwrap(),returnAmount.unwrap());
+        emit TokenOperation(msg.sender, market.id, 2, isYesToken ? 1 : 2, amount.unwrap(), returnAmount.unwrap());
     }
 
-    function claimReward() public {
-
-        // DISABLED TO SHOW DEMO. ENABLE FOR PRODUCTION
-        // require(market.resolved, "Market not resolved");
+    function claimReward() public nonReentrant whenNotPaused {
+        require(market.resolved, "Market not resolved");
 
         uint256 reward = 0;
         uint256 userBalance;
@@ -355,8 +359,8 @@ event RewardClaimed(
         uint256 rewardPool = market.totalPriceToken;
         reward = (userBalance * rewardPool) / totalWinningStake;
 
-        // Transfer reward to user
-        require(priceToken.transfer(msg.sender, reward), "Payment failed");
+        // Transfer reward to user using SafeERC20
+        priceToken.safeTransfer(msg.sender, reward);
 
         // Burn user's prediction tokens
         if (market.won) {
@@ -366,6 +370,21 @@ event RewardClaimed(
         }
 
         emit RewardClaimed(msg.sender, market.id, reward);
+    }
+
+    // Admin functions
+    function pause() external onlyOwner {
+        _pause();
+    }
+
+    function unpause() external onlyOwner {
+        _unpause();
+    }
+
+    // Emergency functions
+    function emergencyWithdraw(address token, uint256 amount) external onlyOwner {
+        require(market.resolved, "Market not resolved");
+        IERC20(token).safeTransfer(owner(), amount);
     }
 
     // Emergency function to add liquidity if needed
